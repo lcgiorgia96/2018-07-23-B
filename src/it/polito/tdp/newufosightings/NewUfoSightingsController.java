@@ -5,13 +5,14 @@
 package it.polito.tdp.newufosightings;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.newufosightings.model.Model;
+import it.polito.tdp.newufosightings.model.State;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -49,6 +50,25 @@ public class NewUfoSightingsController {
 	@FXML
 	void doCreaGrafo(ActionEvent event) {
 
+		
+		try {
+			int giorni = Integer.parseInt(txtxG.getText());
+			int anno = Integer.parseInt(txtAnno.getText());
+			
+			if (giorni >= 1 && giorni <= 180 && anno>=1906 && anno<=2014) {
+				this.model.creaGrafo(giorni,anno);
+				List<State> adiacenti = this.model.getStati();
+				for (State s: adiacenti) {
+					txtResult.appendText(s+" "+this.model.getTotPesi(s)+"\n");
+				}
+				
+			}
+			
+		} catch(NumberFormatException e ) {
+			txtResult.appendText("Inserire il numero nel formato corretto\n");
+		} catch (RuntimeException e) {
+			txtResult.appendText("Errore");
+		}
 	}
 
 	@FXML
